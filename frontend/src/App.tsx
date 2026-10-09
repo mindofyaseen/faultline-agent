@@ -229,6 +229,7 @@ export const App: React.FC = () => {
         awsRegion={healthData.aws_region || 'us-east-1'}
         modelId={healthData.model_id || 'amazon.nova-lite-v1:0'}
         engine={healthData.engine || 'Amazon Bedrock Converse API'}
+        isHealthy={currentScenario?.state !== 'FAULT_INJECTED'}
       />
 
       {/* Rehearsal Scenarios Selection Cards */}
