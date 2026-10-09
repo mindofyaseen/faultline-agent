@@ -9,12 +9,6 @@
 
 ---
 
-![FAULTLINE Hero Banner — Rehearsing Silent Data Pipeline Failures](docs/images/faultline-hero.png)
-
-*Figure 1: "Your pipeline is green. But is your data telling the truth?" — FAULTLINE 3D pipeline topology and synthetic failure rehearsal architecture in a protected sandbox.*
-
----
-
 ## 🌐 Live Application & Open Source Links
 
 * **Live Web Application (Amazon S3):**  
@@ -141,9 +135,9 @@ Using **Three.js**, each pipeline stage is rendered as a floating crystalline ic
 * **Click-to-Inspect 3D HUD:** Clicking any 3D node opens a floating glassmorphic telemetry HUD displaying stage runtime (ms) and operational status.
 * **2D / 3D Toggle:** Users can switch instantaneously between the 3D WebGL world and the classical 2D topological graph.
 
-![FAULTLINE Live Dashboard](docs/images/screenshot-dashboard.png)
+![FAULTLINE Live Dashboard](https://raw.githubusercontent.com/mindofyaseen/faultline-agent/main/docs/images/screenshot-dashboard.png)
 
-*Figure 2: The actual working FAULTLINE dashboard on AWS S3, featuring the interactive Three.js 3D pipeline topology, real-time boundary gauges, and scenario controls.*
+*Live working FAULTLINE dashboard on AWS S3, featuring the interactive Three.js 3D pipeline topology, real-time boundary gauges, and scenario controls.*
 
 ---
 
@@ -154,23 +148,23 @@ To demonstrate the genuine capabilities of the system, here is the complete end-
 #### Step 1: Injected Fault & Anomaly Detection
 When network retries inject duplicate records into the ingestion stream, the 3D topology immediately shifts `payment_transactions` to a crimson alert state. The boundary gauges flag an invariant breach (`unique_transaction_id`).
 
-![Fault Injected State](docs/images/screenshot-fault-injected.png)
+![Fault Injected State](https://raw.githubusercontent.com/mindofyaseen/faultline-agent/main/docs/images/screenshot-fault-injected.png)
 
-*Figure 3: Injected failure state — Node highlighted in red, duplicate storm telemetry active, and pipeline boundary invariant breached.*
+*Injected failure state: Node highlighted in red, duplicate storm telemetry active, and pipeline boundary invariant breached.*
 
 #### Step 2: Measured Evidence & Downstream Impact Quantification
 Rather than hallucinating or relying on vague summaries, the agent calls `inspect_evidence` and `simulate_downstream_impact`. It extracts the exact duplicated keys (`txn_103`, `txn_107`, `txn_109`) and calculates the concrete downstream financial discrepancy: gross liability is overstated by **+$470.00 (+32.98%)** ($1,895.00 observed vs. $1,425.00 baseline).
 
-![Measured Evidence and Impact](docs/images/screenshot-evidence-and-impact.png)
+![Measured Evidence and Impact](https://raw.githubusercontent.com/mindofyaseen/faultline-agent/main/docs/images/screenshot-evidence-and-impact.png)
 
-*Figure 4: Deterministic evidence drawer — Exact duplicate transaction IDs cited and downstream financial variance quantified with zero LLM hallucination.*
+*Deterministic evidence drawer: Exact duplicate transaction IDs cited and downstream financial variance quantified with zero LLM hallucination.*
 
 #### Step 3: Remediation & Before-and-After Verification
 FAULTLINE proposes the registered guardrail `idempotent_dedupe_on_key` and calls `replay_and_verify`. The synthetic pipeline is re-executed with deduplication logic applied. The assertion matrix validates that 100% of invariants pass, the discrepancy drops to $0.00, and the topology glows reassuringly cyan.
 
-![Replay Verified State](docs/images/screenshot-replay-verified.png)
+![Replay Verified State](https://raw.githubusercontent.com/mindofyaseen/faultline-agent/main/docs/images/screenshot-replay-verified.png)
 
-*Figure 5: Verification complete — Applied guardrail, 100% passed assertions, and verified discrepancy reduction.*
+*Verification complete: Applied guardrail, 100% passed assertions, and verified discrepancy reduction.*
 
 ---
 
