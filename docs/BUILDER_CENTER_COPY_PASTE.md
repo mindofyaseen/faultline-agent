@@ -19,10 +19,10 @@ An evidence-first serverless AI platform on AWS that lets data teams safely rehe
 ---
 
 ## 3. Cover Image (Upload a cover image)
-* **File to upload / drag & drop:**  
-  `docs/images/faultline-hero.png` (or `evidence/faultline-hero.png`)  
-* **File size:** 853 KB (< 2 MB limit)  
-* **Aspect ratio:** 16:9 landscape (Clean 3D pipeline topology, no text, no logos)
+* **File to upload / drag & drop directly from your Desktop:**  
+  `C:\Users\mindo\Desktop\FAULTLINE-COVER.png` *(ya `FAULTLINE-COVER.jpg`)*
+* **File size:** 820 KB (< 2 MB limit)  
+* **Infographic Design:** 16:9 Landscape, bold neon cyan "FAULTLINE" title, subtitle "Autonomous Data-Pipeline Resilience & Failure Rehearsal Agent", badges for "AMAZON BEDROCK POWERED", "ZERO-DATA-LOSS SYNTHETIC SANDBOX", "EVIDENCE, NOT VIBES", and 3D failure rehearsal topology.
 
 ---
 
