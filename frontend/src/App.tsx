@@ -16,7 +16,7 @@ import {
   ToolTrace,
   ReplayResult,
 } from './types';
-import { Header } from './components/Header';
+import { Navbar, NavTab } from './components/Navbar';
 import { ScenarioCards } from './components/ScenarioCards';
 import { PipelineVisualizer } from './components/PipelineVisualizer';
 import { ActionControls } from './components/ActionControls';
@@ -30,8 +30,16 @@ import { ChaosStudioModal } from './components/ChaosStudioModal';
 import { GuardrailCodeModal } from './components/GuardrailCodeModal';
 import { CustomCsvModal } from './components/CustomCsvModal';
 import { VisualTelemetryGauges } from './components/VisualTelemetryGauges';
+import { Footer } from './components/Footer';
+
+// Pages
+import { FeaturesPage } from './components/pages/FeaturesPage';
+import { ArchitecturePage } from './components/pages/ArchitecturePage';
+import { RoiCalculatorPage } from './components/pages/RoiCalculatorPage';
+import { ApiDocsPage } from './components/pages/ApiDocsPage';
 
 export const App: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<NavTab>('workbench');
   const [healthData, setHealthData] = useState<{
     aws_region?: string;
     model_id?: string;
@@ -224,78 +232,184 @@ export const App: React.FC = () => {
 
   return (
     <div className="app-container">
-      {/* Header bar */}
-      <Header
+      {/* Sticky Startup Navigation Bar */}
+      <Navbar
+        activeTab={activeTab}
+        onSelectTab={setActiveTab}
         awsRegion={healthData.aws_region || 'us-east-1'}
-        modelId={healthData.model_id || 'amazon.nova-lite-v1:0'}
-        engine={healthData.engine || 'Amazon Bedrock Converse API'}
         isHealthy={currentScenario?.state !== 'FAULT_INJECTED'}
+        onTriggerFireDrill={handleRunFireDrill}
       />
 
-      {/* Rehearsal Scenarios Selection Cards */}
-      <ScenarioCards
-        scenarios={scenarios}
-        selectedScenarioId={selectedScenarioId}
-        onSelectScenario={setSelectedScenarioId}
-      />
-
-      {currentScenario && (
+      {/* VIEW: WORKBENCH */}
+      {activeTab === 'workbench' && (
         <>
-          {/* Action Bar & Product Suite Controls */}
-          <ActionControls
-            scenario={currentScenario}
-            isRunningDrill={isRunningDrill}
-            isInjecting={isInjecting}
-            isInvestigating={isInvestigating}
-            isReplaying={isReplaying}
-            onRunFireDrill={handleRunFireDrill}
-            onInjectFault={handleInjectFault}
-            onInvestigate={handleInvestigate}
-            onReplay={handleReplay}
-            onReset={handleReset}
-            onOpenReport={handleOpenReport}
-            onOpenCopilot={() => setIsCopilotOpen(true)}
-            onOpenChaosStudio={() => setIsChaosStudioOpen(true)}
-            onOpenGuardrailCode={() => setIsGuardrailCodeOpen(true)}
-            onOpenCsvSandbox={() => setIsCsvSandboxOpen(true)}
-          />
+          {/* Hero Banner with Startup Badges */}
+          <div
+            style={{
+              padding: '28px 32px',
+              background: 'linear-gradient(135deg, rgba(12, 19, 36, 0.8), rgba(6, 10, 20, 0.9))',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              borderRadius: '16px',
+              marginBottom: '24px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '20px',
+              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.4)',
+            }}
+          >
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                <span
+                  style={{
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
+                    padding: '2px 8px',
+                    borderRadius: '999px',
+                    background: 'rgba(6, 182, 212, 0.15)',
+                    color: '#38bdf8',
+                    letterSpacing: '0.06em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  🚀 AWS Builder Center Challenge Entry
+                </span>
+                <span style={{ fontSize: '0.75rem', color: '#64748b' }}>•</span>
+                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+                  Model: {healthData.model_id || 'amazon.nova-lite-v1:0'}
+                </span>
+              </div>
+              <h1
+                style={{
+                  fontSize: '1.9rem',
+                  fontWeight: 800,
+                  color: '#f8fafc',
+                  letterSpacing: '-0.02em',
+                  marginBottom: '6px',
+                }}
+              >
+                Your pipeline is green. But is your data telling the truth?
+              </h1>
+              <p style={{ fontSize: '0.9rem', color: '#94a3b8', maxWidth: '720px', lineHeight: '1.5' }}>
+                Rehearse silent data corruption, duplicate settlement mirages, and temporal timezone
+                shifts in an isolated 3D WebGL laboratory before bad data pollutes executive dashboards.
+              </p>
+            </div>
 
-          {/* Real-Time Telemetry & Downstream Boundary Gauges */}
-          <VisualTelemetryGauges
-            scenarioId={selectedScenarioId}
-            qualityProfile={qualityProfile}
-            impacts={downstreamImpacts}
-          />
-
-          {/* Pipeline Topology Visualizer */}
-          <PipelineVisualizer
-            stages={currentScenario.stages}
-            scenarioTitle={currentScenario.title}
-            state={currentScenario.state}
-          />
-
-          {/* Investigation Grid: Live Agent Feed & Evidence Drawer */}
-          <div className="grid-cols-2" style={{ marginBottom: '24px' }}>
-            <InvestigationFeed
-              toolTraces={toolTraces}
-              synthesis={synthesis}
-              isInvestigating={isInvestigating || isRunningDrill}
-              modelId={healthData.model_id || 'amazon.nova-lite-v1:0'}
-            />
-
-            <EvidenceDrawer
-              qualityProfile={qualityProfile}
-              scenarioId={selectedScenarioId}
-            />
+            {/* Ecosystem Badges */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'flex-end' }}>
+              <span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                Ecosystem Compatibility
+              </span>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                {['Snowflake', 'AWS Glue', 'dbt', 'Airflow', 'Datadog'].map((tool, idx) => (
+                  <span
+                    key={idx}
+                    style={{
+                      fontSize: '0.72rem',
+                      padding: '3px 8px',
+                      borderRadius: '6px',
+                      background: 'rgba(255, 255, 255, 0.04)',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                      color: '#cbd5e1',
+                    }}
+                  >
+                    {tool}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
 
-          {/* Downstream Impact Panel */}
-          <DownstreamImpactView impacts={downstreamImpacts} />
+          {/* Rehearsal Scenarios Selection Cards */}
+          <ScenarioCards
+            scenarios={scenarios}
+            selectedScenarioId={selectedScenarioId}
+            onSelectScenario={setSelectedScenarioId}
+          />
 
-          {/* Before vs After Replay Verification */}
-          <BeforeAfterReplay replayResult={replayResult} />
+          {currentScenario && (
+            <>
+              {/* Action Bar & Product Suite Controls */}
+              <ActionControls
+                scenario={currentScenario}
+                isRunningDrill={isRunningDrill}
+                isInjecting={isInjecting}
+                isInvestigating={isInvestigating}
+                isReplaying={isReplaying}
+                onRunFireDrill={handleRunFireDrill}
+                onInjectFault={handleInjectFault}
+                onInvestigate={handleInvestigate}
+                onReplay={handleReplay}
+                onReset={handleReset}
+                onOpenReport={handleOpenReport}
+                onOpenCopilot={() => setIsCopilotOpen(true)}
+                onOpenChaosStudio={() => setIsChaosStudioOpen(true)}
+                onOpenGuardrailCode={() => setIsGuardrailCodeOpen(true)}
+                onOpenCsvSandbox={() => setIsCsvSandboxOpen(true)}
+              />
+
+              {/* Real-Time Telemetry & Downstream Boundary Gauges */}
+              <VisualTelemetryGauges
+                scenarioId={selectedScenarioId}
+                qualityProfile={qualityProfile}
+                impacts={downstreamImpacts}
+              />
+
+              {/* Pipeline Topology Visualizer with 3D Holographic / 2D Toggle */}
+              <PipelineVisualizer
+                stages={currentScenario.stages}
+                scenarioTitle={currentScenario.title}
+                state={currentScenario.state}
+              />
+
+              {/* Investigation Grid: Live Agent Feed & Evidence Drawer */}
+              <div className="grid-cols-2" style={{ marginBottom: '24px' }}>
+                <InvestigationFeed
+                  toolTraces={toolTraces}
+                  synthesis={synthesis}
+                  isInvestigating={isInvestigating || isRunningDrill}
+                  modelId={healthData.model_id || 'amazon.nova-lite-v1:0'}
+                />
+
+                <EvidenceDrawer
+                  qualityProfile={qualityProfile}
+                  scenarioId={selectedScenarioId}
+                />
+              </div>
+
+              {/* Downstream Impact Panel */}
+              <DownstreamImpactView impacts={downstreamImpacts} />
+
+              {/* Before vs After Replay Verification */}
+              <BeforeAfterReplay replayResult={replayResult} />
+            </>
+          )}
         </>
       )}
+
+      {/* VIEW: PRODUCT SUITES */}
+      {activeTab === 'features' && (
+        <FeaturesPage onLaunchWorkbench={() => setActiveTab('workbench')} />
+      )}
+
+      {/* VIEW: AWS ARCHITECTURE */}
+      {activeTab === 'architecture' && (
+        <ArchitecturePage onLaunchWorkbench={() => setActiveTab('workbench')} />
+      )}
+
+      {/* VIEW: ROI CALCULATOR */}
+      {activeTab === 'calculator' && (
+        <RoiCalculatorPage onLaunchWorkbench={() => setActiveTab('workbench')} />
+      )}
+
+      {/* VIEW: API DOCS & CI/CD */}
+      {activeTab === 'docs' && <ApiDocsPage />}
+
+      {/* Enterprise Startup Footer */}
+      <Footer onSelectTab={(tab) => setActiveTab(tab)} />
 
       {/* Exportable Incident Report Modal */}
       <ReportModal
