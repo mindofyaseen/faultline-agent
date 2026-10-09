@@ -61,7 +61,7 @@ agents, agent, bedrock, serverless, python
 
 Every data engineer has experienced the dread of a green dashboard that lies.
 
-Your Apache Airflow DAG or AWS Step Functions state machine completes with exit code zero. Every task emits a success signal. CloudWatch metrics show 100% healthy execution. Yet hours later, the finance team flags a $470,000 settlement over-disbursement, or clinic coordinators discover that patient schedules are catastrophically overbooked because scheduled appointments silently rolled across calendar days.
+Your Apache Airflow DAG or AWS Step Functions state machine completes with exit code zero. Every task emits a success signal. CloudWatch metrics show 100% healthy execution. Yet hours later, the finance team flags a $470.00 settlement over-disbursement in a single reconciliation batch (+32.98% financial overstatement), or clinic coordinators discover that patient schedules are catastrophically overbooked because scheduled appointments silently rolled across calendar days.
 
 ```
 [Infrastructural Monitoring]: Exit Code 0  (HEALTHY)
@@ -154,10 +154,10 @@ To make FAULTLINE an agent people genuinely enjoy using, I built **The Pipeline 
 Rather than requiring complex YAML configurations, FAULTLINE provides three authentic, reproducible scenarios:
 
 | Scenario | Domain | Injected Failure | Discrepancy & Measured Impact | Remediation Guardrail |
-|---|---|---|---|---|
-| **The Double-Charge Mirage** | Fintech / Payments | Duplicate payment authorization events from network retries | Raw 13 records vs 10 unique; settlement ledger inflated by **+$470.00 (+32.98% overstatement)** | `idempotent_dedupe_on_key` |
-| **The Timestamp That Moved the Day** | Healthcare / Scheduling | Omitted ISO-8601 UTC offsets causing midnight date rollover | 4 appointments jump from Oct 10 to Oct 11; Oct 11 volume surges to **18 (>16 capacity ceiling)** | `strict_utc_normalization_and_quarantine` |
-| **The Missing Learning Events** | EdTech / Event Streams | 45m mobile sync delays exceed 15m watermark + field drift `completed_at` | Completion rate drops from **100% (12/12) to 75% (9/12)**; 3 students denied certificates | `adaptive_watermark_with_schema_aliasing` |
+| :--- | :--- | :--- | :--- | :--- |
+| **The Double-Charge Mirage** | Fintech / Payments | Duplicate payment authorizations from network retry storm | Raw 13 records vs 10 unique; settlement ledger overstated by **+$470.00 (+32.98%)** | `idempotent_dedupe_on_key` |
+| **The Timestamp That Moved the Day** | Healthcare / Scheduling | Omitted ISO-8601 UTC offsets causing midnight date rollover | 4 appointments jump Oct 10 to Oct 11; volume surges to **18 (>16 capacity ceiling)** | `strict_utc_normalization_and_quarantine` |
+| **The Missing Learning Events** | EdTech / Event Streams | 45m mobile sync delays exceed 15m watermark + field drift `completed_at` | Completion rate drops from **100% (12/12) to 75% (9/12)**; 3 certificates denied | `adaptive_watermark_with_schema_aliasing` |
 
 ### 🎮 The 3D Holographic WebGL Experience
 Using **Three.js**, each pipeline stage is rendered as a floating crystalline icosahedron wrapped in rotating holographic wireframe cages and orbiting torus rings:
