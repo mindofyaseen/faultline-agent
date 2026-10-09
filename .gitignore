@@ -1,0 +1,43 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/node_modules/
+.npm/
+
+# Environment and Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+aws-credentials.json
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+
+# AWS & SAM
+.aws-sam/
+samconfig.toml
+cdk.out/
+
+# Temporary logs
+*.log
+scratch/
+build_lambda/
+*.zip
+out.json
