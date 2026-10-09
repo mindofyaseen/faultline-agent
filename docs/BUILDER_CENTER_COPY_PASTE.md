@@ -2,7 +2,14 @@
 
 ---
 
-## 1. Title (0/255 characters)
+## 1. Title
+### Option A: SEO Title (< 60 chars — Recommended for Search & Feeds)
+```text
+FAULTLINE: AI Pipeline Failure Rehearsal on AWS
+```
+*(Total: 47 characters)*
+
+### Option B: Full Descriptive Title (0/255 characters)
 ```text
 FAULTLINE: Rehearsing Silent Data-Pipeline Failures with an Evidence-First Amazon Bedrock Agent
 ```
@@ -10,7 +17,14 @@ FAULTLINE: Rehearsing Silent Data-Pipeline Failures with an Evidence-First Amazo
 
 ---
 
-## 2. Description (0/512 characters)
+## 2. Description
+### Option A: SEO Description (< 160 chars — Recommended for Search & Social)
+```text
+Safely rehearse and fix silent data pipeline failures on AWS with FAULTLINE, an evidence-first Bedrock agent using 3D topologies and deterministic tools.
+```
+*(Total: 153 characters)*
+
+### Option B: Detailed Description (0/512 characters)
 ```text
 An evidence-first serverless AI platform on AWS that lets data teams safely rehearse and remediate silent pipeline failures in an isolated sandbox using Amazon Bedrock Nova Lite, Three.js 3D topologies, and deterministic tool grounding.
 ```
@@ -59,9 +73,9 @@ agents, agent, bedrock, serverless, python
 
 ## 1. Introduction: The Green Pipeline Paradox
 
-Every data engineer has experienced the dread of a green dashboard that lies.
+Every data engineer has experienced the silent risk of a green dashboard that lies.
 
-Your Apache Airflow DAG or AWS Step Functions state machine completes with exit code zero. Every task emits a success signal. CloudWatch metrics show 100% healthy execution. Yet hours later, the finance team flags a $470.00 settlement over-disbursement in a single reconciliation batch (+32.98% financial overstatement), or clinic coordinators discover that patient schedules are catastrophically overbooked because scheduled appointments silently rolled across calendar days.
+Your Apache Airflow DAG or AWS Step Functions state machine completes with exit code zero. Every task emits a success signal. CloudWatch metrics show 100% healthy execution. Yet hours later, the finance team flags a $470.00 settlement over-disbursement in a single reconciliation batch (+32.98% financial overstatement), or clinic coordinators discover that patient schedules are severely overbooked because scheduled appointments silently rolled across calendar days.
 
 ```
 [Infrastructural Monitoring]: Exit Code 0  (HEALTHY)
@@ -162,7 +176,7 @@ Rather than requiring complex YAML configurations, FAULTLINE provides three auth
 ### 🎮 The 3D Holographic WebGL Experience
 Using **Three.js**, each pipeline stage is rendered as a floating crystalline icosahedron wrapped in rotating holographic wireframe cages and orbiting torus rings:
 * **Laminar Particle Highway:** Glowing cyan data particles stream along 3D Catmull-Rom spline curves between pipeline stages.
-* **Failure Turbulence:** When a failure is injected, the corrupted stage vibrates violently, transforms to warning crimson, and emits turbulent red spark particles.
+* **Failure Turbulence:** When a failure is injected, the corrupted stage pulses rapidly, transforms to warning crimson, and emits turbulent red spark particles.
 * **Interactive Parallax:** Moving the cursor smoothly tilts the 3D perspective with damped camera lerping.
 * **Click-to-Inspect 3D HUD:** Clicking any 3D node opens a floating glassmorphic telemetry HUD displaying stage runtime (ms) and operational status.
 * **2D / 3D Toggle:** Users can switch instantaneously between the 3D WebGL world and the classical 2D topological graph.
@@ -226,7 +240,7 @@ Allows data engineers to paste or upload raw CSV records directly from their own
 
 ## 6. Engineering Challenge Overcome: Cross-Platform Lambda Packaging
 
-During development on Windows, standard `pip install` downloaded Windows-specific `.pyd` dynamic libraries for native C/Rust packages like `pydantic-core`. When packaged into the AWS Lambda Linux environment, the function crashed on startup:
+During development on Windows, standard `pip install` downloaded Windows-specific `.pyd` dynamic libraries for native C/Rust packages like `pydantic-core`. When packaged into the AWS Lambda Linux environment, the function failed during initialization:
 ```text
 Runtime.ImportModuleError: cannot import name 'ArgsKwargs' from 'pydantic_core._pydantic_core'
 ```
@@ -253,7 +267,7 @@ FAULTLINE is validated by a comprehensive automated test suite consisting of **3
 tests/test_agent_evaluation.py::test_agent_eval_fintech_diagnosis PASSED [  3%]
 tests/test_agent_evaluation.py::test_agent_eval_healthcare_diagnosis PASSED [  6%]
 tests/test_agent_evaluation.py::test_agent_eval_edtech_diagnosis PASSED  [  9%]
-tests/test_agent_evaluation.py::test_agent_eval_security_jailbreak_attempt PASSED [ 12%]
+tests/test_agent_evaluation.py::test_agent_eval_security_prompt_injection_resistance PASSED [ 12%]
 tests/test_api_endpoints.py::test_health_endpoint PASSED                 [ 15%]
 tests/test_api_endpoints.py::test_list_scenarios_endpoint PASSED         [ 18%]
 tests/test_api_endpoints.py::test_get_scenario_detail PASSED             [ 21%]
@@ -287,7 +301,7 @@ tests/test_scenarios_and_tools.py::test_export_incident_report_markdown_and_json
 ```
 
 * **Live Model Diagnostics:** `amazon.nova-lite-v1:0` successfully diagnosed 100% of seeded failures, executed an average of 5.2 relevant tool calls per investigation, cited exact record keys without hallucination, and terminated cleanly within five turns.
-* **Adversarial Jailbreak Immunity:** Prompt injection attacks attempting to coerce the agent into leaking AWS credentials or executing shell commands were completely neutralized by deterministic JSON Schema bounds.
+* **Prompt Boundary Hardening:** Adversarial prompt injections attempting to coerce the agent into leaking AWS credentials or executing shell commands were completely neutralized by deterministic JSON Schema bounds.
 
 ---
 

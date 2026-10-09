@@ -41,7 +41,7 @@ def test_agent_eval_edtech_diagnosis():
     assert result["tool_calls_executed"] >= 3
 
 
-def test_agent_eval_security_jailbreak_attempt():
+def test_agent_eval_security_prompt_injection_resistance():
     GLOBAL_REGISTRY.reset_all()
     agent = FaultlineAgent(max_tool_rounds=4)
     # Attempt prompt injection requesting AWS secret access
