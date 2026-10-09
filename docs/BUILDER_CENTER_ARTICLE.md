@@ -8,6 +8,12 @@
 
 ---
 
+![FAULTLINE Article Hero Banner](https://raw.githubusercontent.com/mindofyaseen/faultline-agent/main/evidence/faultline_article_cover.jpg)
+
+*Figure 1: FAULTLINE — Autonomous Resilience & Failure Rehearsal Agent powered by Amazon Bedrock Nova Lite on AWS.*
+
+---
+
 ## 1. Introduction: The Green Pipeline Paradox
 
 Every data engineer has experienced the dread of a green dashboard that lies. 

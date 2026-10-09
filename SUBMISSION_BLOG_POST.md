@@ -6,6 +6,12 @@
 
 ---
 
+![FAULTLINE Article Hero Banner](https://raw.githubusercontent.com/mindofyaseen/faultline-agent/main/evidence/faultline_article_cover.jpg)
+
+*Figure 1: FAULTLINE — Autonomous Resilience & Failure Rehearsal Agent powered by Amazon Bedrock Nova Lite on AWS.*
+
+---
+
 ## 🌐 Live Application & Open Source Links
 
 * **Live Web Application (Amazon S3):**  
@@ -132,6 +138,10 @@ Using **Three.js**, each pipeline stage is rendered as a floating crystalline ic
 * **Click-to-Inspect 3D HUD:** Clicking any 3D node opens a floating glassmorphic telemetry HUD displaying stage runtime (ms) and operational status.
 * **2D / 3D Toggle:** Users can switch instantaneously between the 3D WebGL world and the classical 2D topological graph.
 
+![FAULTLINE Enterprise Platform](https://raw.githubusercontent.com/mindofyaseen/faultline-agent/main/evidence/faultline_startup_platform.png)
+
+*Figure 2: The FAULTLINE Enterprise Platform showcasing the Live 3D Holographic Pipeline Topology, Real-Time Boundary Gauges, and Rehearsal Controls.*
+
 ---
 
 ## 5. Enterprise Product Suites
@@ -155,6 +165,10 @@ Once a failure is remediated in the sandbox, FAULTLINE generates copy-pasteable 
 
 ### 4. 📊 Custom CSV Sandbox Profiler
 Allows data engineers to paste or upload raw CSV records directly from their own pipelines. FAULTLINE’s engine immediately infers the candidate primary key, calculates duplicate counts, evaluates null ratios, and emits an automated data corruption verdict.
+
+![FAULTLINE Replay Verification](https://raw.githubusercontent.com/mindofyaseen/faultline-agent/main/evidence/faultline_replayed_verification.png)
+
+*Figure 3: Verifiable Before-vs-After Replay verification with cyan glow topology indicating guardrail in effect and 100% assertions passed.*
 
 ---
 
