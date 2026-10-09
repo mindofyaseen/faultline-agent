@@ -1,8 +1,11 @@
 # FAULTLINE: Rehearsing Silent Data-Pipeline Failures with an Evidence-First Amazon Bedrock Agent
 
-**Subtitle:** How we built a serverless AI resilience platform on AWS with Three.js 3D topologies, deterministic tool grounding, and 1-click guardrail synthesis.  
-**Author:** Solutions Architect & AI Systems Engineer  
-**Tags:** `agents`, `agent`, `aws-community`, `amazon-bedrock`, `serverless`, `python`  
+> **AWS Builder Center Article Details:**
+> * **Title:** `FAULTLINE: Rehearsing Silent Data-Pipeline Failures with an Evidence-First Amazon Bedrock Agent`
+> * **Description:** `An evidence-first serverless AI platform on AWS that lets data teams safely rehearse and remediate silent pipeline failures in an isolated sandbox using Amazon Bedrock Nova Lite, Three.js 3D topologies, and deterministic tool grounding.`
+> * **Cover Image:** `docs/images/faultline-hero.png`
+> * **Tags:** `agents`, `agent`, `bedrock`, `serverless`, `python`
+> * **Author:** Solutions Architect & AI Systems Engineer
 
 ---
 
