@@ -67,9 +67,9 @@ Because FAULTLINE relies entirely on serverless primitives and pay-per-token fou
 
 ---
 
-## 5. The Deterministic Tool Harness
+## 5. The Deterministic Tool Harness & Enterprise Product Suite
 
-The backend agent interacts with the sandbox exclusively through eight registered tools:
+The backend agent interacts with the sandbox through eight registered tools and four enterprise product extensions:
 1. `inspect_pipeline`: Inspects stage topologies, runtime dependencies, and declared invariants.
 2. `run_quality_profile`: Executes deterministic mathematical calculations (uniqueness ratios, null distributions, temporal bounds).
 3. `run_fault_scenario`: Applies permitted fault mutations to isolated datasets in the sandbox.
@@ -78,6 +78,12 @@ The backend agent interacts with the sandbox exclusively through eight registere
 6. `propose_guardrail`: Maps invariant failures to approved remediation patterns from a validated catalog.
 7. `replay_and_verify`: Re-executes the pipeline with the guardrail applied and computes assertion pass/fail differentials.
 8. `export_incident_report`: Generates structured, auditable Markdown and JSON incident reports.
+
+### Enterprise Product Extensions:
+* **Interactive Bedrock AI Copilot:** Real-time conversational multi-turn chat backed by `amazon.nova-lite-v1:0` allowing engineers to ask freeform questions about failure mechanics, HIPAA/SOC-2 compliance implications, and architectural trade-offs with citations bound to live telemetry.
+* **Parametric Chaos Studio:** Interactive slider-driven chaos simulator enabling custom fault parameters (e.g., variable duplicate bursts from 1 to 8, midnight timestamp shifts, and sliding watermark latency skew from 20 to 90 minutes).
+* **Production Guardrail Codegen:** Instantly converts verified sandbox remediations into production-grade implementations for **AWS Glue / PySpark**, **dbt SQL models & schema tests**, and **AWS Lambda streaming event handlers**.
+* **Custom Dataset Sandbox Profiler:** A dedicated sandbox interface enabling engineers to paste or upload raw CSV records to run immediate primary key uniqueness, null distribution, and schema drift profiling.
 
 ---
 
@@ -89,14 +95,14 @@ Rather than compromising our architecture, I resolved this by scripting automate
 ```bash
 pip install --platform manylinux2014_x86_64 --only-binary=:all: --python-version 312 --target build_lambda ...
 ```
-This ensured that all native C/Rust extensions were compiled for Linux x86_64, creating a lean, 5.39 MB Lambda artifact that deployed and initialized flawlessly on AWS.
+This ensured that all native C/Rust extensions were compiled for Linux x86_64, creating a lean, 5.40 MB Lambda artifact that deployed and initialized flawlessly on AWS.
 
 ---
 
 ## 7. Empirical Testing & Evaluation Results
 
 FAULTLINE underwent rigorous automated testing:
-* **29 of 29 Automated Tests Passed (100% Pass Rate)** across baseline verification, fault injection, evidence bounding, guardrail regression, and security jailbreak resistance.
+* **33 of 33 Automated Tests Passed (100% Pass Rate)** across baseline verification, fault injection, evidence bounding, guardrail regression, enterprise codegen, parametric chaos injection, and security jailbreak resistance.
 * **Live Model Evaluation:** When evaluated across all three scenarios, `amazon.nova-lite-v1:0` successfully diagnosed 100% of seeded failures, executed an average of 5.2 relevant tool calls per investigation, cited exact record keys without hallucination, and terminated cleanly within five turns.
 * **Adversarial Hardening:** Prompt injections attempting to coerce the model into leaking AWS IAM secrets or executing arbitrary bash commands were completely neutralized by strict tool schema bounds.
 
@@ -112,3 +118,4 @@ FAULTLINE underwent rigorous automated testing:
 ## 9. Conclusion
 
 FAULTLINE demonstrates that AI agents are most effective when grounded in factual measurement and bounded by safe execution sandboxes. By pairing Amazon Bedrock's Nova Lite with deterministic serverless tools on AWS, data teams can turn silent pipeline disasters into predictable, rehearsed victories.
+

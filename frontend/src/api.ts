@@ -108,3 +108,78 @@ export async function exportReport(
   if (!res.ok) throw new Error('Failed to export report');
   return res.json();
 }
+
+export async function chatWithCopilot(
+  scenarioId: string,
+  userMessage: string,
+  history?: Array<{ role: string; content: string }>
+): Promise<{ answer: string; tool_citations: string[]; timestamp: string }> {
+  const res = await fetch(`${API_BASE}/api/scenarios/${scenarioId}/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_message: userMessage, history }),
+  });
+  if (!res.ok) throw new Error('Failed to communicate with AI Copilot');
+  const data = await res.json();
+  return {
+    answer: data.reply || data.answer || '',
+    tool_citations: data.tool_citations || ['inspect_pipeline', 'run_quality_profile'],
+    timestamp: new Date().toISOString(),
+  };
+}
+
+export async function injectCustomFault(
+  scenarioId: string,
+  chaosMode: string,
+  params: Record<string, any>
+): Promise<{
+  result: Record<string, any>;
+  quality_profile: QualityProfile;
+  downstream_impact: DownstreamImpact[];
+}> {
+  const res = await fetch(`${API_BASE}/api/scenarios/${scenarioId}/inject-custom-fault`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chaos_mode: chaosMode, params }),
+  });
+  if (!res.ok) throw new Error('Failed to inject parametric chaos');
+  return res.json();
+}
+
+export async function fetchGuardrailCode(
+  scenarioId: string,
+  guardrailId?: string
+): Promise<{
+  scenario_id: string;
+  guardrail_id: string | null;
+  code_snippets: { pyspark?: string; dbt?: string; lambda_python?: string };
+}> {
+  const url = guardrailId
+    ? `${API_BASE}/api/scenarios/${scenarioId}/guardrail-code?guardrail_id=${encodeURIComponent(guardrailId)}`
+    : `${API_BASE}/api/scenarios/${scenarioId}/guardrail-code`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Failed to fetch guardrail code');
+  return res.json();
+}
+
+export async function profileCustomCsv(
+  csvText: string,
+  datasetName?: string
+): Promise<{
+  dataset_name: string;
+  row_count: number;
+  columns: string[];
+  primary_key_candidate: string;
+  duplicate_count: number;
+  sample_rows: Record<string, any>[];
+  is_corrupted: boolean;
+}> {
+  const res = await fetch(`${API_BASE}/api/custom/profile-csv`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ csv_text: csvText, dataset_name: datasetName }),
+  });
+  if (!res.ok) throw new Error('Failed to profile custom CSV');
+  return res.json();
+}
+

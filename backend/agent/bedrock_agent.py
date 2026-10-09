@@ -171,6 +171,74 @@ class FaultlineAgent:
             fallback["warning"] = f"Bedrock invocation returned: {str(aws_err)}. Fallback execution provided."
             return fallback
 
+    def chat_turn(
+        self,
+        scenario_id: str,
+        user_message: str,
+        conversation_history: Optional[List[Dict[str, str]]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Interactive conversational investigation turn.
+        Answers user questions using current scenario context and registered tools.
+        """
+        # Fetch current scenario context
+        context_data = dispatch_tool("inspect_pipeline", {"scenario_id": scenario_id})
+        profile_data = dispatch_tool("run_quality_profile", {"scenario_id": scenario_id, "dataset_type": "active"})
+        impact_data = dispatch_tool("simulate_downstream_impact", {"scenario_id": scenario_id})
+
+        system_prompt = f"""You are FAULTLINE Copilot, an expert data reliability engineer.
+Your principle is: "EVIDENCE, NOT VIBES."
+Current Active Scenario: {scenario_id} ({context_data.get('title')})
+State: {profile_data.get('metrics', {}).get('is_corrupted') and 'FAULT_INJECTED' or 'HEALTHY/REMEDIATED'}
+Active Metrics: {json.dumps(profile_data.get('metrics', {}))}
+Invariants Evaluated: {json.dumps(profile_data.get('invariants_evaluated', []))}
+Downstream Impacts: {json.dumps(impact_data.get('impacts', []))}
+
+Answer the user concisely and authoritatively. Cite specific record IDs and dollar or volume variances from the active metrics. Never fabricate unmeasured statistics.
+"""
+
+        messages = []
+        if conversation_history:
+            for turn in conversation_history[-4:]:
+                messages.append({
+                    "role": turn["role"],
+                    "content": [{"text": turn["content"]}],
+                })
+
+        messages.append({
+            "role": "user",
+            "content": [{"text": user_message}],
+        })
+
+        if not self.bedrock_client:
+            return {
+                "reply": f"[Deterministic Sandbox Copilot] Based on the active telemetry for {scenario_id}, {profile_data.get('duplicate_count', 0)} duplicates/anomalies were measured with discrepancy {profile_data.get('metrics', {}).get('discrepancy', 0)}. Evidence shows pipeline invariants require guardrail enforcement.",
+                "tools_used": [],
+                "scenario_id": scenario_id,
+            }
+
+        try:
+            response = self.bedrock_client.converse(
+                modelId=self.model_id,
+                messages=messages,
+                system=[{"text": system_prompt}],
+                inferenceConfig={"maxTokens": 1024, "temperature": 0.2},
+            )
+            output_msg = response["output"]["message"]
+            reply_text = "".join(b["text"] for b in output_msg.get("content", []) if "text" in b)
+            return {
+                "reply": reply_text or "Analysis completed based on current verified telemetry.",
+                "scenario_id": scenario_id,
+                "model_id": self.model_id,
+            }
+        except Exception as e:
+            logger.error(f"Error in chat_turn: {e}")
+            return {
+                "reply": f"Based on verified pipeline telemetry: Invariants evaluated show status '{profile_data.get('all_invariants_passed') and 'PASS' or 'FAIL'}'. Active discrepancy: {profile_data.get('metrics', {}).get('discrepancy', 'N/A')}.",
+                "error": str(e),
+                "scenario_id": scenario_id,
+            }
+
     def _deterministic_fallback_investigation(self, scenario_id: str, prompt: str) -> Dict[str, Any]:
         """
         Executes the canonical deterministic investigation sequence without LLM

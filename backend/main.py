@@ -4,7 +4,7 @@ Serves the REST API for scenarios, tool execution, and Bedrock agent investigati
 """
 
 import os
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from fastapi import FastAPI, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -56,6 +56,16 @@ class InvestigateRequest(BaseModel):
 class ToolExecuteRequest(BaseModel):
     tool_name: str
     tool_args: Dict[str, Any]
+
+
+@app.post("/api/tools/execute")
+def execute_tool_endpoint(payload: ToolExecuteRequest):
+    try:
+        from backend.tools.harness import dispatch_tool
+        out = dispatch_tool(payload.tool_name, payload.tool_args)
+        return {"status": "SUCCESS", "tool_name": payload.tool_name, "output": out}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @app.get("/api/health")
@@ -172,10 +182,89 @@ def export_report(scenario_id: str, format: str = "markdown"):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/api/tools/execute")
-def execute_tool(payload: ToolExecuteRequest):
+class CustomFaultRequest(BaseModel):
+    chaos_mode: str
+    params: Dict[str, Any] = {}
+
+
+class ChatRequest(BaseModel):
+    user_message: str
+    history: Optional[List[Dict[str, str]]] = None
+
+
+class CsvProfileRequest(BaseModel):
+    csv_text: str
+    dataset_name: Optional[str] = "custom_sandbox_dataset"
+
+
+@app.post("/api/scenarios/{scenario_id}/chat")
+def scenario_chat(scenario_id: str, payload: ChatRequest):
     try:
-        output = dispatch_tool(payload.tool_name, payload.tool_args)
-        return {"tool_name": payload.tool_name, "status": "SUCCESS", "output": output}
+        reply = agent.chat_turn(
+            scenario_id=scenario_id,
+            user_message=payload.user_message,
+            conversation_history=payload.history,
+        )
+        return reply
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Chat turn failed: {str(e)}")
+
+
+@app.post("/api/scenarios/{scenario_id}/inject-custom-fault")
+def inject_custom_fault(scenario_id: str, payload: CustomFaultRequest):
+    try:
+        from backend.scenarios.chaos_engine import inject_parametric_chaos
+        res = inject_parametric_chaos(scenario_id, payload.chaos_mode, payload.params)
+        profile = tool_run_quality_profile(scenario_id, dataset_type="active")
+        impact = tool_simulate_downstream_impact(scenario_id)
+        return {
+            "result": res,
+            "quality_profile": profile,
+            "downstream_impact": impact["impacts"],
+        }
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/api/scenarios/{scenario_id}/guardrail-code")
+def get_guardrail_code(scenario_id: str, guardrail_id: Optional[str] = None):
+    from backend.tools.guardrail_codegen import generate_guardrail_code
+    code = generate_guardrail_code(scenario_id, guardrail_id or "")
+    return {
+        "scenario_id": scenario_id,
+        "guardrail_id": guardrail_id,
+        "code": code,
+        "code_snippets": code,
+    }
+
+
+@app.post("/api/custom/profile-csv")
+def profile_custom_csv(payload: CsvProfileRequest):
+    import io
+    import csv
+    try:
+        reader = csv.DictReader(io.StringIO(payload.csv_text.strip()))
+        rows = list(reader)
+        if not rows:
+            raise ValueError("CSV appears empty or has no header.")
+        if len(rows) > 500:
+            rows = rows[:500]  # Enforce safety bound
+
+        fieldnames = reader.fieldnames or []
+        first_col = fieldnames[0] if fieldnames else "id"
+        values = [r.get(first_col) for r in rows if r.get(first_col)]
+        unique_vals = set(values)
+        duplicates = len(values) - len(unique_vals)
+
+        return {
+            "dataset_name": payload.dataset_name,
+            "row_count": len(rows),
+            "columns": fieldnames,
+            "primary_key_candidate": first_col,
+            "duplicate_count": duplicates,
+            "sample_rows": rows[:5],
+            "is_corrupted": duplicates > 0,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"CSV profiling error: {str(e)}")
+

@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![AWS Bedrock](https://img.shields.io/badge/Amazon%20Bedrock-Nova%20Lite%20v1%3A0-orange.svg)](https://aws.amazon.com/bedrock/)
 [![AWS Lambda](https://img.shields.io/badge/AWS%20Lambda-Serverless%20Python%203.12-yellow.svg)](https://aws.amazon.com/lambda/)
-[![Tests](https://img.shields.io/badge/Tests-29%2F29%20Passing-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-33%2F33%20Passing-brightgreen.svg)](tests/)
 [![Build Status](https://img.shields.io/badge/Status-Live%20on%20AWS-success.svg)](http://faultline-app-237657481511-us-east-1.s3-website-us-east-1.amazonaws.com)
 
 > *"Your pipeline is green. But is your data telling the truth?"*  
@@ -27,17 +27,29 @@
 
 ---
 
-## 📸 The Signature Experience: The Pipeline Fire Drill
+## 📸 The Enterprise Product Dashboard
 
-FAULTLINE provides an interactive engineering workbench aesthetic that transforms abstract data quality issues into a tactile, guided resilience rehearsal:
+FAULTLINE delivers an engineering workbench aesthetic that transforms abstract data quality issues into a tactile, guided resilience rehearsal platform:
 
-![FAULTLINE Live Workbench](evidence/faultline_live_workbench.png)
+![FAULTLINE Enterprise Product Dashboard](evidence/faultline_product_dashboard.png)
 
-*Figure 1: The FAULTLINE Engineering Laboratory interface showing active telemetry, scenario topology, action controls, and real-time evidence drawers.*
+*Figure 1: The FAULTLINE Enterprise Dashboard showcasing Live Telemetry & Boundary Gauges, Rehearsal Scenarios, Product Suites (Copilot, Chaos Studio, Codegen, CSV Sandbox), and Pipeline Execution Topologies.*
 
 ![FAULTLINE Replay Verification](evidence/faultline_replayed_verification.png)
 
 *Figure 2: Verifiable Before-vs-After Replay verification with cyan glow topology indicating guardrail in effect and 100% assertions passed.*
+
+---
+
+## 💎 Enterprise Product Capabilities
+
+FAULTLINE goes beyond a standard hackathon prototype by providing a complete resilience product:
+
+1. **🤖 Amazon Bedrock AI Copilot:** Interactive conversational assistant querying live sandbox state using `amazon.nova-lite-v1:0` with deterministic evidence citations.
+2. **⚡ Parametric Chaos Studio:** Interactive parameter tuners allowing engineers to stress-test pipelines with variable duplicate counts, timezone drifts, and watermark latency skews.
+3. **📜 Production Guardrail Codegen:** 1-click code export generating production-ready implementations for **AWS Glue / PySpark**, **dbt (SQL & tests)**, and **AWS Lambda (Python 3.12)**.
+4. **📊 Custom Dataset Sandbox Profiler:** Sandbox profiling engine allowing data teams to paste raw CSV data to check primary key uniqueness, nulls, and schema drift.
+5. **📈 Real-Time Boundary & Telemetry Gauges:** Visual progress bars displaying financial variances, clinic bed capacity thresholds, and SLA completion rates.
 
 ---
 

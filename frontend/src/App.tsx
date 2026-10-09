@@ -25,6 +25,11 @@ import { EvidenceDrawer } from './components/EvidenceDrawer';
 import { DownstreamImpactView } from './components/DownstreamImpactView';
 import { BeforeAfterReplay } from './components/BeforeAfterReplay';
 import { ReportModal } from './components/ReportModal';
+import { CopilotChat } from './components/CopilotChat';
+import { ChaosStudioModal } from './components/ChaosStudioModal';
+import { GuardrailCodeModal } from './components/GuardrailCodeModal';
+import { CustomCsvModal } from './components/CustomCsvModal';
+import { VisualTelemetryGauges } from './components/VisualTelemetryGauges';
 
 export const App: React.FC = () => {
   const [healthData, setHealthData] = useState<{
@@ -47,10 +52,16 @@ export const App: React.FC = () => {
   const [isInvestigating, setIsInvestigating] = useState(false);
   const [isReplaying, setIsReplaying] = useState(false);
 
-  // Modal
+  // Modals & Panels
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [reportMarkdown, setReportMarkdown] = useState('');
   const [reportJson, setReportJson] = useState<any>(null);
+
+  // Enterprise Feature Modals
+  const [isCopilotOpen, setIsCopilotOpen] = useState(false);
+  const [isChaosStudioOpen, setIsChaosStudioOpen] = useState(false);
+  const [isGuardrailCodeOpen, setIsGuardrailCodeOpen] = useState(false);
+  const [isCsvSandboxOpen, setIsCsvSandboxOpen] = useState(false);
 
   // Initial load
   useEffect(() => {
@@ -205,6 +216,12 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleChaosApplied = (profile: QualityProfile, impacts: DownstreamImpact[]) => {
+    setQualityProfile(profile);
+    setDownstreamImpacts(impacts);
+    loadScenarioDetails(selectedScenarioId);
+  };
+
   return (
     <div className="app-container">
       {/* Header bar */}
@@ -223,7 +240,7 @@ export const App: React.FC = () => {
 
       {currentScenario && (
         <>
-          {/* Action Bar (RUN FIRE DRILL) */}
+          {/* Action Bar & Product Suite Controls */}
           <ActionControls
             scenario={currentScenario}
             isRunningDrill={isRunningDrill}
@@ -236,6 +253,17 @@ export const App: React.FC = () => {
             onReplay={handleReplay}
             onReset={handleReset}
             onOpenReport={handleOpenReport}
+            onOpenCopilot={() => setIsCopilotOpen(true)}
+            onOpenChaosStudio={() => setIsChaosStudioOpen(true)}
+            onOpenGuardrailCode={() => setIsGuardrailCodeOpen(true)}
+            onOpenCsvSandbox={() => setIsCsvSandboxOpen(true)}
+          />
+
+          {/* Real-Time Telemetry & Downstream Boundary Gauges */}
+          <VisualTelemetryGauges
+            scenarioId={selectedScenarioId}
+            qualityProfile={qualityProfile}
+            impacts={downstreamImpacts}
           />
 
           {/* Pipeline Topology Visualizer */}
@@ -274,6 +302,45 @@ export const App: React.FC = () => {
         onClose={() => setIsReportOpen(false)}
         reportMarkdown={reportMarkdown}
         reportJson={reportJson}
+      />
+
+      {/* AI Copilot Drawer Modal */}
+      {currentScenario && (
+        <CopilotChat
+          isOpen={isCopilotOpen}
+          onClose={() => setIsCopilotOpen(false)}
+          scenarioId={selectedScenarioId}
+          scenarioTitle={currentScenario.title}
+        />
+      )}
+
+      {/* Parametric Chaos Studio Modal */}
+      {currentScenario && (
+        <ChaosStudioModal
+          isOpen={isChaosStudioOpen}
+          onClose={() => setIsChaosStudioOpen(false)}
+          scenarioId={selectedScenarioId}
+          scenarioTitle={currentScenario.title}
+          onChaosApplied={handleChaosApplied}
+        />
+      )}
+
+      {/* Production Guardrail Code Modal */}
+      {currentScenario && (
+        <GuardrailCodeModal
+          isOpen={isGuardrailCodeOpen}
+          onClose={() => setIsGuardrailCodeOpen(false)}
+          scenarioId={selectedScenarioId}
+          scenarioTitle={currentScenario.title}
+          guardrailId={currentScenario.available_guardrails[0]?.id}
+          guardrailName={currentScenario.available_guardrails[0]?.name}
+        />
+      )}
+
+      {/* Custom CSV Dataset Profiler Modal */}
+      <CustomCsvModal
+        isOpen={isCsvSandboxOpen}
+        onClose={() => setIsCsvSandboxOpen(false)}
       />
     </div>
   );
